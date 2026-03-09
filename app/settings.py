@@ -26,7 +26,10 @@ SECRET_KEY = 'django-insecure-d9odt__t+@(7rdrlb+6pli6gazu%emm&j&4#$3g0ctx42766%=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Preencha com o domínio do seu site. Ex: ['www.seusite.com.br', 'seusite.com.br']
+ALLOWED_HOSTS = ['ferverbrasil.com.br', 'www.ferverbrasil.com.br', '127.0.0.1', 'localhost']
+
+CSRF_TRUSTED_ORIGINS = ['https://ferverbrasil.com.br', 'https://www.ferverbrasil.com.br']
 
 
 # Application definition
@@ -116,6 +119,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Diretório para onde o `collectstatic` vai copiar os arquivos para produção.
+STATIC_ROOT = BASE_DIR / 'staticfiles'
  
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -124,8 +130,18 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Pegue em: https://www.mercadopago.com.br/developers/panel
 MERCADOPAGO_ACCESS_TOKEN = "APP_USR-1396324076754720-030714-6f784543105607e6f0a09cc232cfd5ff-3250431331"
 
-# Configuração de E-mail para Recuperação de Senha (Imprime no terminal)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# CONFIGURAÇÃO DE E-MAIL
+# Modo Desenvolvimento: Imprime o link de redefinição no terminal (CMD/VS Code)
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Modo Produção (Gmail): Descomente abaixo e preencha para enviar e-mails reais
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'mikelsbprocash@gmail.com'
+EMAIL_HOST_PASSWORD = 'lgtb ljpl jjqv pkkd'
+DEFAULT_FROM_EMAIL = 'Ferver Brasil <mikelsbprocash@gmail.com>'
 
 # URL de Login (para onde o @login_required redireciona)
 LOGIN_URL = '/login/'

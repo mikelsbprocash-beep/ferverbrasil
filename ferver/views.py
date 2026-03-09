@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
-from .models import Perfil, Estado, Cidade
+from .models import Perfil, Estado, Cidade, FotoAdicional
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
@@ -9,6 +9,9 @@ import re
 import mercadopago
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
+from datetime import timedelta
+from django.db.models import Q
 
 
 def login_view(request):
@@ -43,13 +46,24 @@ def gerenciar_perfil_view(request):
     except Perfil.DoesNotExist:
         return redirect('cadastro')
 
+    # --- VERIFICAÇÃO DE VALIDADE DOS PLANOS (Lazy Check) ---
+    # Se o plano venceu, remove o status automaticamente ao acessar o painel
+    now = timezone.now()
+    if perfil.premium and perfil.validade_premium and perfil.validade_premium < now:
+        perfil.premium = False
+        perfil.save()
+    
+    if perfil.boost and perfil.validade_destaque and perfil.validade_destaque < now:
+        perfil.boost = False
+        perfil.save()
+
     if request.method == "POST":
         # Update fields from POST data
         nome = request.POST.get("nome")
         if nome:
             perfil.nome = nome
 
-        perfil.idade = request.POST.get("idade") or perfil.idade
+        perfil.idade = request.POST.get("idade") or None
         perfil.descricao = request.POST.get("descricao", perfil.descricao)
         perfil.telefone = request.POST.get("telefone", perfil.telefone)
         
@@ -58,6 +72,23 @@ def gerenciar_perfil_view(request):
 
         if 'foto2' in request.FILES:
             perfil.foto2 = request.FILES["foto2"]
+
+        # --- LÓGICA DA GALERIA PREMIUM ---
+        # 1. Deletar fotos selecionadas
+        delete_ids = request.POST.getlist('delete_fotos')
+        if delete_ids:
+            FotoAdicional.objects.filter(id__in=delete_ids, perfil=perfil).delete()
+
+        # 2. Upload de novas fotos (Apenas se for Premium)
+        if perfil.premium:
+            fotos_novas = request.FILES.getlist('fotos_extras')
+            qtd_atual = perfil.fotos_adicionais.count()
+            limite = 5 # Limite de fotos extras
+            
+            for foto in fotos_novas:
+                if qtd_atual < limite:
+                    FotoAdicional.objects.create(perfil=perfil, imagem=foto)
+                    qtd_atual += 1
 
         # Handle city update
         nome_cidade = request.POST.get("cidade")
@@ -174,14 +205,48 @@ def cadastrar_perfil(request):
 
 def ferver_view(request):
     # Separa os perfis para as diferentes seções do template
-    top_geral = Perfil.objects.filter(ativo=True, top_geral=True).order_by('-criado_em')[:5]
-    top_destaques = Perfil.objects.filter(ativo=True, boost=True).order_by('?')[:5]
-    perfis_comuns = Perfil.objects.filter(ativo=True, boost=False).order_by('-criado_em')
+    now = timezone.now()
+
+    # --- FILTROS DE BUSCA ---
+    estado_busca = request.GET.get('estado')
+    cidade_busca = request.GET.get('cidade')
+    termo_busca = request.GET.get('q')
+
+    filtros = Q(ativo=True)
+
+    if estado_busca and estado_busca != '':
+        filtros &= Q(estado__uf=estado_busca)
+    
+    if cidade_busca and cidade_busca != '':
+        filtros &= Q(cidade__nome=cidade_busca)
+        
+    if termo_busca:
+        filtros &= (Q(nome__icontains=termo_busca) | Q(cidade__nome__icontains=termo_busca) | Q(estado__nome__icontains=termo_busca))
+
+    # 1. Pega os perfis TOP GERAL (maior prioridade) - Aplicando filtros também
+    top_geral = Perfil.objects.filter(filtros, top_geral=True).order_by('-criado_em')[:5]
+
+    # 2. Pega os perfis em DESTAQUE, mas EXCLUI os que já são TOP GERAL para não duplicar
+    top_destaques = Perfil.objects.filter(
+        filtros, 
+        boost=True,
+        top_geral=False # Exclui para não duplicar
+    ).filter(Q(validade_destaque__isnull=True) | Q(validade_destaque__gte=now)).order_by('?')[:5]
+
+    # 3. Pega os perfis COMUNS, excluindo os que são TOP GERAL ou DESTAQUE
+    perfis_comuns = Perfil.objects.filter(
+        filtros, 
+        boost=False, 
+        top_geral=False # Exclui para não duplicar
+    ).order_by('-criado_em')
+
+    total_perfis = len(top_geral) + len(top_destaques) + len(perfis_comuns)
 
     return render(request, "ferver/ferver.html", {
         "top_geral": top_geral,
         "top_destaques": top_destaques,
         "perfis_comuns": perfis_comuns,
+        "total_perfis": total_perfis,
     })
 
 # --- LÓGICA DO MERCADO PAGO ---
@@ -226,11 +291,6 @@ def checkout_plano(request, tipo_plano):
         "payer": {
             "email": request.user.email or "email@teste.com"
         },
-        "payment_methods": {
-            "excluded_payment_types": [
-                {"id": "atm"} # Exclui caixas eletrônicos, mantendo Cartão, Boleto e PIX.
-            ]
-        },
         "back_urls": {
             "success": request.build_absolute_uri(reverse('sucesso_pagamento')),
             "failure": request.build_absolute_uri(reverse('ferver')), # Volta para home em caso de falha
@@ -259,6 +319,7 @@ def checkout_plano(request, tipo_plano):
 
     print(f"--- REDIRECIONANDO PARA MERCADO PAGO: {preference['init_point']} ---")
     return redirect(preference["init_point"])
+
 def sucesso_pagamento(request):
     return render(request, "ferver/sucesso.html") # Crie este template simples depois
 
@@ -296,8 +357,16 @@ def webhook_mercadopago(request):
     try:
         perfil = Perfil.objects.get(id=perfil_id)
         
-        if tipo_plano in ['destaque', 'premium']:
+        now = timezone.now()
+        
+        if tipo_plano == 'destaque':
             perfil.boost = True
+            perfil.validade_destaque = now + timedelta(days=7)
+        elif tipo_plano == 'premium':
+            perfil.premium = True
+            perfil.boost = True # Plano Premium também fica em destaque
+            perfil.validade_premium = now + timedelta(days=30)
+            perfil.validade_destaque = now + timedelta(days=30)
         elif tipo_plano == 'verificado':
             perfil.verificado = True
         

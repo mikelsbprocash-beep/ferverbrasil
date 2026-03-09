@@ -1,71 +1,23 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-<meta charset="UTF-8">
-<title>Pagamento Confirmado - Fever Brasil</title>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
-<style>
-    body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background: #000000;
-        color: #ffffff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        text-align: center;
-    }
-    .container {
-        background: #0d1b2a;
-        padding: 40px;
-        border-radius: 15px;
-        border: 2px solid #0bbf4f; /* Verde sucesso */
-        box-shadow: 0 0 30px rgba(11, 191, 79, 0.3);
-        max-width: 500px;
-    }
-    h1 {
-        font-family: 'Oswald', sans-serif;
-        color: #0bbf4f;
-        font-size: 36px;
-        margin-bottom: 10px;
-        text-transform: uppercase;
-    }
-    p {
-        font-size: 18px;
-        color: #cccccc;
-        line-height: 1.5;
-        margin-bottom: 30px;
-    }
-    .icon {
-        font-size: 60px;
-        margin-bottom: 20px;
-        display: block;
-    }
-    button {
-        background: #ff6a00;
-        color: #fff;
-        border: none;
-        padding: 15px 30px;
-        font-size: 18px;
-        font-weight: bold;
-        border-radius: 30px;
-        cursor: pointer;
-        transition: transform 0.2s;
-        text-transform: uppercase;
-    }
-    button:hover {
-        transform: scale(1.05);
-        background: #ff4500;
-    }
-</style>
-</head>
-<body>
-    <div class="container">
-        <span class="icon">✅</span>
-        <h1>Pagamento Confirmado!</h1>
-        <p>Obrigado! Seu pagamento foi processado com sucesso.<br>Seu plano já está ativo e seu perfil foi atualizado.</p>
-        <button onclick="window.location.href='/'">Voltar para o Início</button>
+{% extends "ferver/base.html" %}
+
+{% block title %}Pagamento Confirmado - Ferver Brasil{% endblock %}
+
+{% block content %}
+<div class="container" style="text-align: center; padding: 50px 20px; min-height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <div style="background: #0d1b2a; padding: 40px; border-radius: 20px; border: 2px solid #0bbf4f; max-width: 500px; width: 100%; box-shadow: 0 0 30px rgba(11, 191, 79, 0.2);">
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#0bbf4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px;">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        
+        <h1 style="color: #0bbf4f; font-family: 'Oswald', sans-serif; text-transform: uppercase; margin-bottom: 15px;">Pagamento Aprovado!</h1>
+        
+        <p style="color: #fff; font-size: 18px; margin-bottom: 10px;">Seu plano foi ativado com sucesso.</p>
+        <p style="color: #ccc; margin-bottom: 30px;">Obrigado por confiar no Ferver Brasil. Seus benefícios já estão disponíveis em sua conta.</p>
+        
+        <a href="{% url 'gerenciar_perfil' %}" style="display: inline-block; padding: 15px 30px; background: #0bbf4f; color: white; text-decoration: none; border-radius: 30px; font-weight: bold; text-transform: uppercase; transition: transform 0.2s;">
+            Gerenciar Meu Perfil
+        </a>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

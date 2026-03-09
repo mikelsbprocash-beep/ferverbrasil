@@ -3,6 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>Fever Brasil</title>
+<meta name="description" content="Ferver Brasil - O maior site de acompanhantes e classificados adultos. Encontre acompanhantes de luxo, massagistas e modelos verificadas em todo o Brasil.">
+<meta name="keywords" content="acompanhantes, escorts, massagistas, acompanhantes de luxo, classificados adultos, sexo, encontros, brasil, sp, rj">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Ferver Brasil - Site de Acompanhantes e Classificados Adultos">
+<meta property="og:description" content="Encontre as melhores acompanhantes e massagistas no Ferver Brasil. Perfis verificados, fotos reais e contato direto.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%23ff6a00%22><path d=%22M12 23c6.075 0 11-4.925 11-11C23 6.5 18 2 18 2c0 4-3 6-3 6s1-6-4-8c0 0-1 5-5 9-2 2-2 4-2 4s-3-3-3-5c0 0-2 3-2 7 0 4.418 3.582 8 8 8z%22/></svg>">
 
@@ -171,7 +178,7 @@ flex-wrap: wrap;
 background: linear-gradient(90deg,#0033ff,#3ea0ff);
 padding: 15px 60px;
 width: fit-content;
-margin: 50px 0 20px 0;
+margin: 20px 0 10px 0;
 border-radius: 12px;
 font-weight: 900;
 font-size: 28px;
@@ -257,12 +264,20 @@ gap:10px;
 margin-top:10px;
 }
 
-.card-buttons button{
+.card-buttons button, .card-buttons a {
 flex:1;
 border:none;
 padding:8px;
 border-radius:6px;
 cursor:pointer;
+text-decoration: none;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 5px;
+font-size: 12px;
+font-weight: bold;
+color: #000; /* Default color for 'ligar' */
 }
 
 .ligar{
@@ -507,6 +522,107 @@ margin-top: 0; /* Space above footer */
 .light-mode .miniblog p {
     color: #333;
 }
+
+/* Carousel Styles */
+.carousel-wrapper {
+    margin-bottom: 20px; /* Space between carousels */
+}
+
+.carousel-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px; /* Wider for more impact */
+    margin: 10px auto;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.carousel-slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide {
+    min-width: 100%;
+    height: 600px; /* Taller slides */
+    position: relative;
+    cursor: pointer;
+    background-color: #111;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.7;
+    transition: transform 0.5s ease;
+}
+
+.carousel-slide:hover img {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+.carousel-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 30px;
+    box-sizing: border-box;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+}
+
+.carousel-caption .top-badge {
+    position: static; /* Override absolute positioning */
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.carousel-caption h3 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 36px;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.carousel-caption p {
+    font-size: 18px;
+    margin: 5px 0 0 0;
+    color: #ccc;
+}
+
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background 0.3s;
+    z-index: 10;
+}
+
+.carousel-nav:hover {
+    background: #ff6a00;
+}
+
+.carousel-prev {
+    left: 20px;
+}
+
+.carousel-next {
+    right: 20px;
+}
 </style>
 </head>
 
@@ -567,62 +683,68 @@ FEVER BRASIL
     <button onclick="openAdsModal()" style="background: #fff; color: #ff6a00; padding: 15px 40px; border: none; border-radius: 30px; font-weight: 900; font-size: 18px; cursor: pointer; text-transform: uppercase; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: transform 0.2s;">Quero Patrocinar</button>
 </div>
 
-    <!-- Perfis em Destaque -->
-    <div class="top-banner">TOPS FEVER</div>
-    <div class="perfil-area">
-        {% for perfil in top_geral %}        
-        <div class="card" data-url="{% url 'perfil_detalhe' perfil.id %}" onclick="window.location.href=this.dataset.url" data-images="{% if perfil.foto %}{{ perfil.foto.url }}{% else %}https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80{% endif %},{% if perfil.foto2 %}{{ perfil.foto2.url }}{% else %}https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=764&q=80{% endif %}">
-            <div class="top-badge">
-                🏆 TOP GERAL
-            </div>
-            <div class="online-badge">Disponível</div>
-            <div class="card-image-wrapper">
-                <img class="img-base" src="{% if perfil.foto %}{{ perfil.foto.url }}{% else %}https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80{% endif %}" alt="{{ perfil.nome }}" />
-                <img class="img-overlay" src="" alt="" />
-            </div>
-            <div class="card-info">
-                <div class="nome">{{ perfil.nome }}</div>
-                <div class="detalhes">{{ perfil.idade }} anos • {{ perfil.cidade.nome }} / {{ perfil.estado.uf }}</div>
-                <div class="preco">R$ {% widthratio perfil.preco 100 1 %}/hora</div>
-                <div class="card-buttons">
-                    <button class="ligar"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/></svg> Ver Telefone</button>
-                    <button class="whats">WhatsApp</button>
+    <!-- Perfis TOP GERAL -->
+    <div class="carousel-wrapper">
+        {% if top_geral %}
+        <div class="top-banner">TOPS FEVER</div>
+        <div class="carousel-container" id="top-geral-carousel">
+            <div class="carousel-slides">
+                {% for perfil in top_geral %}
+                {% with all_photos=perfil.get_all_photos %}
+                <div class="carousel-slide" onclick="window.location.href='{% url 'perfil_detalhe' perfil.id %}'">
+                    <img src="{% if all_photos %}{{ all_photos.0.url }}{% else %}https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80{% endif %}" alt="{{ perfil.nome }}">
+                    <div class="carousel-caption">
+                        <div class="top-badge">🏆 TOP GERAL</div>
+                        <h3>{{ perfil.nome }}</h3>
+                        <p>{{ perfil.cidade.nome }} / {{ perfil.estado.uf }}</p>
+                    </div>
                 </div>
+                {% endwith %}
+                {% endfor %}
             </div>
+            {% if top_geral|length > 1 %}
+            <button class="carousel-nav carousel-prev">&#10094;</button>
+            <button class="carousel-nav carousel-next">&#10095;</button>
+            {% endif %}
         </div>
-        {% endfor %}
-        {% for perfil in top_destaques %}
-        <div class="card" data-url="{% url 'perfil_detalhe' perfil.id %}" onclick="window.location.href=this.dataset.url" data-images="{% if perfil.foto %}{{ perfil.foto.url }}{% else %}https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=764&q=80{% endif %},{% if perfil.foto2 %}{{ perfil.foto2.url }}{% else %}https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80{% endif %}">
-            <div class="top-badge" style="background:linear-gradient(90deg,#ff6a00,#ff9a00);">
-                ⭐ DESTAQUE
-            </div>
-            <div class="online-badge">Disponível</div>
-            <div class="card-image-wrapper">
-                <img class="img-base" src="{% if perfil.foto %}{{ perfil.foto.url }}{% else %}https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=764&q=80{% endif %}" alt="{{ perfil.nome }}" />
-                <img class="img-overlay" src="" alt="" />
-            </div>
-            <div class="card-info">
-                <div class="nome">{{ perfil.nome }}</div>
-                <div class="detalhes">{{ perfil.idade }} anos • {{ perfil.cidade.nome }} / {{ perfil.estado.uf }}</div>
-                <div class="preco">R$ {% widthratio perfil.preco 100 1 %}/hora</div>
-                <div class="card-buttons">
-                <button class="ligar"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/></svg> Ver Telefone</button>
-                    <button class="whats">WhatsApp</button>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
+        {% endif %}
     </div>
 
+    <!-- Perfis em Destaque -->
+    <div class="carousel-wrapper">
+        {% if top_destaques %}
+        <div class="top-banner" style="background: linear-gradient(90deg,#ff6a00,#ff9a00); box-shadow: 0 10px 20px rgba(255, 106, 0, 0.3);">DESTAQUES</div>
+        <div class="carousel-container" id="destaques-carousel">
+            <div class="carousel-slides">
+                {% for perfil in top_destaques %}
+                {% with all_photos=perfil.get_all_photos %}
+                <div class="carousel-slide" onclick="window.location.href='{% url 'perfil_detalhe' perfil.id %}'">
+                    <img src="{% if all_photos %}{{ all_photos.0.url }}{% else %}https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=764&q=80{% endif %}" alt="{{ perfil.nome }}">
+                    <div class="carousel-caption">
+                        <div class="top-badge" style="background:linear-gradient(90deg,#ff6a00,#ff9a00);">⭐ DESTAQUE</div>
+                        <h3>{{ perfil.nome }}</h3>
+                        <p>{{ perfil.cidade.nome }} / {{ perfil.estado.uf }}</p>
+                    </div>
+                </div>
+                {% endwith %}
+                {% endfor %}
+            </div>
+            {% if top_destaques|length > 1 %}
+            <button class="carousel-nav carousel-prev">&#10094;</button>
+            <button class="carousel-nav carousel-next">&#10095;</button>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
 
 <!-- BUSCA -->
 
-<div class="busca">
+<form class="busca" method="GET" action="{% url 'ferver' %}">
 
-<input type="text" placeholder="Busque estado ou cidade">
+<input type="text" name="q" placeholder="Busque por nome..." value="{{ request.GET.q|default:'' }}">
 
-<select>
-<option>Todos os estados</option>
+<select name="estado" id="estadoSelect">
+<option value="">Todos os estados</option>
 <option value="AC">Acre</option>
 <option value="AL">Alagoas</option>
 <option value="AP">Amapá</option>
@@ -652,8 +774,8 @@ FEVER BRASIL
 <option value="TO">Tocantins</option>
 </select>
 
-<select>
-<option>Todas as cidades</option>
+<select name="cidade" id="cidadeSelect">
+<option value="">Todas as cidades</option>
 <!-- AC -->
 <option data-estado="AC">Rio Branco</option>
 <option data-estado="AC">Cruzeiro do Sul</option>
@@ -806,19 +928,28 @@ FEVER BRASIL
 <option data-estado="TO">Araguaína</option>
 </select>
 
-</div>
+<button type="submit" style="padding: 0 30px; background: #ff6a00; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase;">BUSCAR</button>
+
+</form>
 
 <div class="resultado">
-1 perfil encontrado
+    {% if total_perfis == 0 %}
+        Nenhum perfil encontrado.
+    {% elif total_perfis == 1 %}
+        1 perfil encontrado
+    {% else %}
+        {{ total_perfis }} perfis encontrados
+    {% endif %}
 </div>
 
 <!-- Perfis Normais -->
 <div class="perfil-area">
     {% for perfil in perfis_comuns %}
-    <div class="card" style="border-color: #333;" data-url="{% url 'perfil_detalhe' perfil.id %}" onclick="window.location.href=this.dataset.url" data-images="{% if perfil.foto %}{{ perfil.foto.url }}{% else %}https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80{% endif %},{% if perfil.foto2 %}{{ perfil.foto2.url }}{% else %}https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80{% endif %}">
+    {% with all_photos=perfil.get_all_photos %}
+    <div class="card" style="border-color: #333;" data-url="{% url 'perfil_detalhe' perfil.id %}" onclick="window.location.href=this.dataset.url" data-images="{% for photo in all_photos %}{{ photo.url }}{% if not forloop.last %},{% endif %}{% endfor %}">
         <div class="online-badge">Disponível</div>
         <div class="card-image-wrapper">
-            <img class="img-base" src="{% if perfil.foto %}{{ perfil.foto.url }}{% else %}https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80{% endif %}" alt="{{ perfil.nome }}" />
+            <img class="img-base" src="{% if all_photos %}{{ all_photos.0.url }}{% else %}https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80{% endif %}" alt="{{ perfil.nome }}" />
             <img class="img-overlay" src="" alt="" />
         </div>
         <div class="card-info">
@@ -826,11 +957,20 @@ FEVER BRASIL
             <div class="detalhes">{{ perfil.idade }} anos • {{ perfil.cidade.nome }} / {{ perfil.estado.uf }}</div>
             <div class="preco">R$ {% widthratio perfil.preco 100 1 %}/hora</div>
             <div class="card-buttons">
-                    <button class="ligar"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/></svg> Ver Telefone</button>
-                <button class="whats">WhatsApp</button>
+                {% if perfil.telefone %}
+                <a href="tel:{{ perfil.telefone }}" class="ligar" onclick="event.stopPropagation();">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/></svg>
+                    Ligar
+                </a>
+                <a href="https://wa.me/55{{ perfil.telefone|cut:'('|cut:')'|cut:'-'|cut:' ' }}" target="_blank" class="whats" onclick="event.stopPropagation();">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.969.585 1.961.893 3.056.893 3.179 0 5.767-2.587 5.767-5.766.001-3.187-2.575-5.77-6.027-5.78zM12 2C6.48 2 2 6.48 2 12c0 1.82.48 3.53 1.31 5.02L2 22l5.12-1.35C8.62 21.55 10.26 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm.01 18c-1.65 0-3.21-.42-4.58-1.17l-.32-.18-3.39.89.9-3.29-.21-.34C3.7 14.6 3.24 13.06 3.24 12c0-4.84 3.94-8.77 8.77-8.77 4.84 0 8.77 3.94 8.77 8.77 0 4.83-3.93 8.77-8.77 8.77z"/></svg>
+                    WhatsApp
+                </a>
+                {% endif %}
             </div>
         </div>
     </div>
+    {% endwith %}
     {% endfor %}
 </div>
 
@@ -883,25 +1023,6 @@ FEVER BRASIL
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const estadoSelect = document.querySelector('.busca select:first-of-type');
-    const cidadeSelect = document.querySelector('.busca select:last-of-type');
-
-    estadoSelect.addEventListener('change', function() {
-        const selectedUf = this.value;
-        const options = cidadeSelect.querySelectorAll('option');
-
-        options.forEach(option => {
-            if (option.value === 'Todas as cidades' || option.getAttribute('data-estado') === selectedUf) {
-                option.style.display = 'block';
-            } else {
-                option.style.display = 'none';
-            }
-        });
-        cidadeSelect.value = 'Todas as cidades';
-    });
-});
-
 function openContactModal() {
     document.getElementById('contactModal').style.display = 'block';
 }
@@ -921,12 +1042,12 @@ function closeAdsModal() {
 const planData = {
     'destaque': {
         title: '⭐ Plano Destaque',
-        desc: 'Seu perfil aparecerá no topo das buscas e na página inicial por 7 dias. Aumente suas visualizações em até 5x!',
+        desc: 'Seu perfil aparecerá no topo das buscas e na página inicial por 7 dias.<br><br><strong>💡 Dica de Imagem:</strong> Para o banner ficar perfeito, recomendamos usar uma foto na horizontal com resolução de <strong>1200x600px</strong>.',
         price: 'R$ 149,90 / semana'
     },
     'premium': {
         title: '💎 Plano Premium',
-        desc: 'Upload ilimitado de fotos, vídeos na galeria e destaque com borda especial por 30 dias.',
+        desc: 'Upload ilimitado de fotos, vídeos na galeria e destaque com borda especial por 30 dias.<br><br><strong>💡 Dica de Imagem:</strong> Para o banner ficar perfeito, recomendamos usar uma foto na horizontal com resolução de <strong>1200x600px</strong>.',
         price: 'R$ 99,90 / mês'
     },
     'verificado': {
@@ -939,7 +1060,7 @@ const planData = {
 function openPlanModal(type) {
     const data = planData[type];
     document.getElementById('planTitle').innerText = data.title;
-    document.getElementById('planDesc').innerText = data.desc;
+    document.getElementById('planDesc').innerHTML = data.desc;
     document.getElementById('planPrice').innerText = data.price;
     
     // Atualiza o botão para redirecionar para a view do Django
@@ -979,8 +1100,73 @@ window.onclick = function(event) {
     }
 }
 
+// --- CAROUSEL LOGIC ---
+function setupCarousel(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const slidesContainer = container.querySelector('.carousel-slides');
+    const slides = container.querySelectorAll('.carousel-slide');
+    const prevButton = container.querySelector('.carousel-prev');
+    const nextButton = container.querySelector('.carousel-next');
+    
+    if (slides.length <= 1) return; // No need for carousel logic if 1 or 0 slides
+
+    let currentIndex = 0;
+
+    function updateCarousel() {
+        slidesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+
+    nextButton.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent click from bubbling to the slide
+        currentIndex = (currentIndex + 1) % slides.length;
+        updateCarousel();
+    });
+
+    prevButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        updateCarousel();
+    });
+
+    // Avançar automaticamente a cada 3 segundos
+    let autoPlay = setInterval(() => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        updateCarousel();
+    }, 3000);
+
+    // Pausar quando o mouse estiver em cima para facilitar o clique
+    container.addEventListener('mouseenter', () => clearInterval(autoPlay));
+    container.addEventListener('mouseleave', () => {
+        autoPlay = setInterval(() => {
+            currentIndex = (currentIndex + 1) % slides.length;
+            updateCarousel();
+        }, 3000);
+    });
+}
 // --- SLIDESHOW AUTOMÁTICO NO HOVER ---
 document.addEventListener("DOMContentLoaded", function() {
+    // --- INITIALIZE CAROUSELS ON PAGE LOAD ---
+    setupCarousel('top-geral-carousel');
+    setupCarousel('destaques-carousel');
+
+    // --- SETUP DROPDOWNS ---
+    const estadoSelect = document.getElementById('estadoSelect');
+    const cidadeSelect = document.getElementById('cidadeSelect');
+
+    if (estadoSelect && cidadeSelect) {
+        estadoSelect.addEventListener('change', function() {
+            const selectedUf = this.value;
+            const options = cidadeSelect.querySelectorAll('option');
+
+            options.forEach(option => {
+                option.style.display = (option.value === '' || option.getAttribute('data-estado') === selectedUf) ? 'block' : 'none';
+            });
+            cidadeSelect.value = '';
+        });
+    }
+
     document.querySelectorAll('.card').forEach(card => {
         const imagesAttr = card.getAttribute('data-images');
         if (!imagesAttr) return;

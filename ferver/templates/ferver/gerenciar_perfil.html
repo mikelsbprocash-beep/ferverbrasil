@@ -143,6 +143,44 @@
         transform: scale(1.02);
         box-shadow: 0 0 20px rgba(255, 106, 0, 0.4);
     }
+
+    /* Estilos da Galeria Premium */
+    .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 10px;
+        margin-bottom: 15px;
+        margin-top: 10px;
+    }
+    .gallery-item {
+        position: relative;
+        border: 1px solid #333;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .gallery-item img {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+    }
+    .gallery-item label {
+        display: block;
+        background: rgba(200, 0, 0, 0.8);
+        color: white;
+        text-align: center;
+        padding: 5px;
+        font-size: 11px;
+        cursor: pointer;
+        margin: 0;
+    }
+    .premium-lock {
+        border: 1px dashed #ff6a00;
+        padding: 20px;
+        text-align: center;
+        border-radius: 10px;
+        background: rgba(255, 106, 0, 0.1);
+        margin-top: 20px;
+    }
 </style>
 
 <div class="cadastro-container">
@@ -167,6 +205,35 @@
     {% endif %}
     <input type="file" name="foto2" accept="image/*">
     <small class="hint">Envie uma nova foto secundária apenas se desejar substituí-la.</small>
+
+    <!-- SEÇÃO GALERIA PREMIUM -->
+    <hr style="border-color: #333; margin: 30px 0;">
+    <h3 style="color: var(--primary-orange); margin-bottom: 10px;">📸 Galeria Premium (Até 5 fotos extras)</h3>
+    
+    {% if perfil.premium %}
+        <div class="gallery-grid">
+            {% for foto in perfil.fotos_adicionais.all %}
+            <div class="gallery-item">
+                <img src="{{ foto.imagem.url }}" alt="Foto Extra">
+                <label>
+                    <input type="checkbox" name="delete_fotos" value="{{ foto.id }}"> Apagar
+                </label>
+            </div>
+            {% empty %}
+            <p style="grid-column: 1/-1; color: #888; font-size: 12px;">Nenhuma foto extra adicionada.</p>
+            {% endfor %}
+        </div>
+
+        <label>Adicionar Fotos Extras</label>
+        <input type="file" name="fotos_extras" multiple accept="image/*">
+        <small class="hint">Selecione várias fotos de uma vez (Ctrl + Clique). Máximo de 5 fotos extras.</small>
+    {% else %}
+        <div class="premium-lock">
+            <p style="color: #fff; margin-bottom: 10px;">🔒 Esta funcionalidade é exclusiva para membros Premium.</p>
+            <button type="button" onclick="window.location.href='{% url 'checkout_plano' 'premium' %}'" style="width: auto; padding: 10px 20px; font-size: 14px; margin-top: 0;">Quero ser Premium</button>
+        </div>
+    {% endif %}
+    <hr style="border-color: #333; margin: 30px 0;">
 
     <div class="grid2">
         <div>

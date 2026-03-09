@@ -5,6 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}FERVER BRASIL{% endblock %}</title>
+    <meta name="description" content="{% block description %}Ferver Brasil - O melhor site de acompanhantes e classificados adultos do Brasil. Encontre perfis verificados, fotos reais e contato direto.{% endblock %}">
+    <meta name="keywords" content="acompanhantes, escorts, massagistas, classificados adultos, acompanhantes de luxo, encontros, brasil, ferver">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="{% block og_title %}Ferver Brasil - Acompanhantes e Classificados Adultos{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Encontre as melhores acompanhantes e massagistas no Ferver Brasil. Perfis com fotos e contato direto.{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'ferver/style.css' %}">
 <style>

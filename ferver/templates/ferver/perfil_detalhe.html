@@ -3,6 +3,10 @@
 
 {% block title %}{{ perfil.nome }} no FERVER{% endblock %}
 
+{% block description %}Confira o perfil de {{ perfil.nome }}, acompanhante em {{ perfil.cidade.nome }} - {{ perfil.estado.uf }}. Veja fotos reais, idade, serviços e entre em contato pelo WhatsApp.{% endblock %}
+{% block og_title %}{{ perfil.nome }} - Acompanhante em {{ perfil.cidade.nome }}{% endblock %}
+{% block og_description %}Veja o perfil de {{ perfil.nome }} no Ferver Brasil. Fotos, telefone e muito mais.{% endblock %}
+
 {% block content %}
 <!-- 
   NOTE FOR DEVELOPER:
@@ -187,6 +191,10 @@
         gap: 6px;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+    }
+    .badge-premium {
+        background: linear-gradient(45deg, #8e2de2, #4a00e0); /* Roxo vibrante */
+        box-shadow: 0 0 10px rgba(142, 45, 226, 0.5);
     }
     .badge-verificado {
         background: #0051ff;
@@ -380,17 +388,13 @@
     <a href="/" class="close-profile-btn">&times;</a>
 
     {% if perfil %}
-    <div class="profile-photos-grid {% if not perfil.foto2 %}single-photo{% endif %}">
-        {% if perfil.foto %}
-            <div class="photo-item" onclick="openLightbox(0)">
-                <img src="{{ perfil.foto.url }}" alt="Foto Principal">
+    {% with all_photos=perfil.get_all_photos %}
+    <div class="profile-photos-grid {% if all_photos|length <= 1 %}single-photo{% endif %}">
+        {% for photo in all_photos %}
+            <div class="photo-item" onclick="openLightbox({{ forloop.counter0 }})">
+                <img src="{{ photo.url }}" alt="Foto de {{ perfil.nome }} {{ forloop.counter }}">
             </div>
-        {% endif %}
-        {% if perfil.foto2 %}
-            <div class="photo-item" onclick="openLightbox(1)">
-                <img src="{{ perfil.foto2.url }}" alt="Foto Secundária">
-            </div>
-        {% endif %}
+        {% endfor %}
     </div>
 
     <div class="profile-content-wrapper">
@@ -410,6 +414,12 @@
                     </div>
                 </div>
                 <div class="header-badges">
+                    {% if perfil.premium %}
+                        <div class="badge badge-premium">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"></path><path d="M11 3v6M13 3v6M2 9h20"></path></svg>
+                            Premium
+                        </div>
+                    {% endif %}
                     {% if perfil.verificado %}
                         <div class="badge badge-verificado">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>
@@ -461,7 +471,7 @@
                     <!-- Plano Destaque -->
                     <div class="plan-card">
                         <h3>Plano Destaque</h3>
-                        <p>Apareça no topo das buscas por 7 dias.</p>
+                        <p>Apareça no topo das buscas por 7 dias.<br><span style="font-size: 12px; color: #ff9a00;">(Ideal: Foto horizontal 1200x600px)</span></p>
                         <div class="plan-price">R$ 149,90</div>
                          <a href="{% url 'checkout_plano' 'destaque' %}" class="btn-buy">Impulsionar</a>
                     </div>
@@ -469,7 +479,7 @@
                     <!-- Plano Premium -->
                     <div class="plan-card">
                         <h3>Plano Premium</h3>
-                        <p>Apareça no topo das buscas por 30 dias.</p>
+                        <p>Apareça no topo das buscas por 30 dias.<br><span style="font-size: 12px; color: #ff9a00;">(Ideal: Foto horizontal 1200x600px)</span></p>
                         <div class="plan-price">R$ 99,90</div>
                         <a href="{% url 'checkout_plano' 'premium' %}" class="btn-buy">Tornar Premium</a>
                     </div>
@@ -496,13 +506,6 @@
             </div>
         </div>
     </div>
-    {% else %}
-    <div style="text-align: center; padding: 100px;">
-        <h2>Perfil não encontrado</h2>
-        <a href="{% url 'ferver' %}" style="color: var(--accent-primary);">Voltar para a home</a>
-    </div>
-    {% endif %}
-</div>
 
 <!-- Lightbox Modal -->
 <div id="lightboxModal" class="lightbox">
@@ -514,14 +517,11 @@
 
 <script>
     let currentLightboxIndex = 0;
-    // Cria array com as URLs das fotos disponíveis
-    const images = [];
-    {% if perfil.foto and perfil.foto.url %}
-    images.push("{{ perfil.foto.url }}");
-    {% endif %}
-    {% if perfil.foto2 and perfil.foto2.url %}
-    images.push("{{ perfil.foto2.url }}");
-    {% endif %}
+    const images = [
+        {% for photo in all_photos %}
+            "{{ photo.url }}",
+        {% endfor %}
+    ];
 
     function openLightbox(index) {
         if (images.length === 0) return;
@@ -560,5 +560,15 @@
         }
     });
 </script>
+
+{% endwith %}
+
+{% else %}
+    <div style="text-align: center; padding: 100px; min-height: 70vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <h2>Perfil não encontrado</h2>
+        <a href="{% url 'ferver' %}" style="color: var(--accent-primary);">Voltar para a home</a>
+    </div>
+{% endif %}
+</div>
 
 {% endblock %}
