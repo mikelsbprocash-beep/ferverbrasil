@@ -12,19 +12,22 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Carrega as variáveis de ambiente do arquivo .env
+load_dotenv(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-d9odt__t+@(7rdrlb+6pli6gazu%emm&j&4#$3g0ctx42766%='
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # Preencha com o domínio do seu site. Ex: ['www.seusite.com.br', 'seusite.com.br']
 ALLOWED_HOSTS = ['ferverbrasil.com.br', 'www.ferverbrasil.com.br', '127.0.0.1', 'localhost']
@@ -128,7 +131,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Mercado Pago (Cole seu Access Token aqui)
 # Pegue em: https://www.mercadopago.com.br/developers/panel
-MERCADOPAGO_ACCESS_TOKEN = "APP_USR-1396324076754720-030714-6f784543105607e6f0a09cc232cfd5ff-3250431331"
+MERCADOPAGO_ACCESS_TOKEN = os.getenv('MERCADOPAGO_ACCESS_TOKEN')
 
 # CONFIGURAÇÃO DE E-MAIL
 # Modo Desenvolvimento: Imprime o link de redefinição no terminal (CMD/VS Code)
@@ -139,9 +142,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'mikelsbprocash@gmail.com'
-EMAIL_HOST_PASSWORD = 'lgtb ljpl jjqv pkkd'
-DEFAULT_FROM_EMAIL = 'Ferver Brasil <mikelsbprocash@gmail.com>'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = f'Ferver Brasil <{EMAIL_HOST_USER}>'
 
 # URL de Login (para onde o @login_required redireciona)
 LOGIN_URL = '/login/'

@@ -255,6 +255,10 @@ def ferver_view(request):
 def checkout_plano(request, tipo_plano):
     print(f"--- CHECKOUT INICIADO: Plano '{tipo_plano}' para usuário '{request.user}' ---")
 
+    if not settings.MERCADOPAGO_ACCESS_TOKEN:
+        print("ERRO CRÍTICO: Token do Mercado Pago não encontrado no .env")
+        return redirect('ferver')
+
     # Substitua pelo seu ACCESS TOKEN de Produção ou Teste do Mercado Pago
     sdk = mercadopago.SDK(settings.MERCADOPAGO_ACCESS_TOKEN)
 
