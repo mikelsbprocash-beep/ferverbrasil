@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Fever Brasil</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%23ff6a00%22><path d=%22M12 23c6.075 0 11-4.925 11-11C23 6.5 18 2 18 2c0 4-3 6-3 6s1-6-4-8c0 0-1 5-5 9-2 2-2 4-2 4s-3-3-3-5c0 0-2 3-2 7 0 4.418 3.582 8 8 8z%22/></svg>">
+
+<style>
+
+:root {
+    --bg-color: #000000;
+    --text-color: #ffffff;
+    --card-bg: #0d1b2a;
+    --card-text: #ffffff;
+    --detail-text: #cccccc;
+    --search-bg: #111d30;
+    --select-bg: #1f2e46;
+    --select-text: #ffffff;
+    --footer-bg: #000000;
+}
+
+.light-mode {
+    --bg-color: #f4f4f9;
+    --text-color: #333333;
+}
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:var(--bg-color);
+color:var(--text-color);
+transition: background 0.3s, color 0.3s;
+display: flex;
+flex-direction: column;
+min-height: 100vh;
+}
+
+/* HEADER */
+
+header{
+background:linear-gradient(90deg,#ff6a00 0%, #ff6a00 50%, #ffffff 100%);
+padding:20px 40px; /* reduced more */
+display:flex;
+align-items:center;
+justify-content:flex-start; /* align to left */
+}
+
+.logo{
+font-size:48px;
+font-weight:800;
+letter-spacing:2px;
+margin-left:6cm; /* move logo right */
+text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* add shadow */
+font-family: 'Oswald', sans-serif;
+color: #fff;
+}
+.header-buttons{
+    margin-left: 21cm; /* even more space from logo */
+}
+
+.header-buttons button{
+background:#fff; /* white box */
+color:#ff6a00; /* orange text */
+border:2px solid #ff6a00; /* orange border */
+padding:10px 20px;
+border-radius:20px;
+margin-left:10px;
+cursor:pointer;
+font-weight:600;
+}
+
+/* CONTAINER */
+
+.container{
+width:1400px;
+margin:auto;
+margin-top:40px;
+margin-bottom:20px;
+flex: 1; /* Faz o container crescer para empurrar o rodapé para baixo */
+}
+
+/* PLANOS */
+
+.planos{
+display:flex;
+gap:10px;
+background:#fff;
+padding:8px;
+border-radius:12px;
+border: 2px solid #ff9a00; /* light orange border */
+}
+
+.plano{
+flex:1;
+background:#eee;
+color:#333;
+border-radius:10px;
+padding:8px;
+font-size:13px;
+}
+
+.plano p {
+margin: 3px 0;
+line-height: 1.2;
+}
+
+.destaque{
+border: 3px solid #ff6a00;
+}
+
+.premium{
+border: 3px solid #ff9a00;
+}
+
+.verificado{
+border: 3px solid #ff9a00;
+}
+
+.plano h3{
+margin:0 0 5px 0;
+font-size:16px;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+.plano h3 svg {
+width: 20px;
+height: 20px;
+}
+
+.plano p:first-of-type{
+font-weight:bold;
+}
+
+.plano button{
+margin-top:5px;
+width:100%;
+padding:6px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.destaque button{
+background:#ff6a00;
+color:#fff;
+}
+
+.premium button{
+background:#0bbf4f;
+color:#fff;
+}
+
+.verificado button{
+background:#2f6cff;
+color:#fff;
+}
+
+
+/* CARD PERFIL */
+
+.perfil-area{
+margin-top:40px;
+display:flex;
+gap:30px;
+flex-wrap: wrap;
+}
+
+.top-banner{
+background: linear-gradient(90deg,#0033ff,#3ea0ff);
+padding: 15px 60px;
+width: fit-content;
+margin: 50px 0 20px 0;
+border-radius: 12px;
+font-weight: 900;
+font-size: 28px;
+color: #fff;
+text-align: center;
+text-transform: uppercase;
+letter-spacing: 3px;
+box-shadow: 0 10px 20px rgba(0, 51, 255, 0.3);
+}
+
+.card{
+width:240px;
+background:var(--card-bg);
+color:var(--card-text);
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 0 20px rgba(0,0,0,0.6);
+position: relative; /* Adicionado para ser a referência do selo */
+border: 3px solid #3ea0ff;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+cursor: pointer;
+}
+
+.card-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 280px;
+    overflow: hidden;
+}
+
+.card-image-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+}
+
+/* Zoom e Sombra ao passar o mouse no card */
+.card:hover {
+transform: scale(1.05);
+box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+z-index: 10;
+}
+
+.card:hover .card-image-wrapper img {
+    transform: scale(1.1);
+}
+
+/* Classes para controle do slideshow */
+.img-base { z-index: 1; }
+.img-overlay { 
+    z-index: 2; 
+    opacity: 0; /* Começa invisível */
+}
+
+.card-info{
+padding:12px;
+}
+
+.nome{
+font-size:15px;
+font-weight:700;
+}
+
+.detalhes{
+color:var(--detail-text);
+font-size:12px;
+margin-top:5px;
+}
+
+.preco{
+color:#ff9900;
+font-weight:bold;
+margin-top:10px;
+}
+
+.card-buttons{
+display:flex;
+gap:10px;
+margin-top:10px;
+}
+
+.card-buttons button{
+flex:1;
+border:none;
+padding:8px;
+border-radius:6px;
+cursor:pointer;
+}
+
+.ligar{
+background:#ddd;
+}
+
+.whats{
+background:#0bbf4f;
+color:#fff;
+}
+
+/* TOP NACIONAL */
+
+.top-badge{
+background:linear-gradient(90deg,#0033ff,#3ea0ff);
+padding:5px 15px;
+width: auto;
+border-radius: 20px;
+text-align: center;
+font-size:12px;
+font-weight:bold;
+position: absolute;
+top: 10px;
+left: 10px;
+z-index: 5;
+text-transform: uppercase;
+letter-spacing: 1px;
+box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.online-badge {
+position: absolute;
+top: 10px;
+right: 10px;
+background: #0bbf4f;
+color: #fff;
+padding: 4px 8px;
+border-radius: 12px;
+font-size: 11px;
+font-weight: bold;
+z-index: 5; /* Aumentado para ficar acima da segunda foto */
+}
+
+/* BUSCA */
+
+.busca{
+margin-top:30px;
+background:var(--search-bg);
+padding:20px;
+border-radius:12px;
+display:flex;
+gap:20px;
+}
+
+.busca input{
+padding:20px; /* increased more */
+border-radius:8px;
+border:2px solid #ff6a00; /* orange border */
+background:#fff; /* white for text input */
+color:#000; /* black text */
+width: 900px; /* increased by 100 */
+}
+
+.busca select{
+padding:20px; /* increased more */
+border-radius:8px;
+border:none;
+background:var(--select-bg);
+color:var(--select-text);
+width: 200px; /* narrower */
+}
+
+.resultado{
+margin-top:20px;
+color:#ccc;
+}
+
+/* FOOTER */
+
+.footer{
+background: #0d1b2a; /* Dark blue from the theme */
+color: #8899a6; /* Softer text color */
+text-align: center;
+padding: 30px 20px;
+font-size: 14px;
+border-top: 1px solid #2a3b4d; /* Subtle separator */
+margin-top: 0; /* Space above footer */
+}
+
+.footer p {
+    margin: 8px 0;
+}
+
+.footer .warning {
+    font-weight: bold;
+    color: #ff6a00; /* Theme orange */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* BANNER ANUNCIE */
+.banner-anuncie {
+    margin-top: 40px;
+    background: linear-gradient(135deg, #ff6a00 0%, #ff4500 100%);
+    border-radius: 15px;
+    padding: 25px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(255, 106, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.banner-anuncie:hover {
+    transform: scale(1.02);
+    box-shadow: 0 20px 40px rgba(255, 106, 0, 0.5);
+}
+
+/* Elementos decorativos de fundo */
+.banner-anuncie::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -10%;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    filter: blur(40px);
+}
+
+.banner-anuncie h2 {
+    font-family: Impact, Arial Black, sans-serif;
+    font-size: 36px;
+    margin: 0;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.banner-anuncie p {
+    font-size: 18px;
+    margin: 10px 0 25px 0;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+/* MODAL FALE CONOSCO */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.8); 
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: #1a1a1a;
+    margin: 15% auto; 
+    padding: 30px;
+    border: 1px solid #ff6a00;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 15px;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(255, 106, 0, 0.3);
+    position: relative;
+}
+
+.close-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+    color: #ff6a00;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.email-destaque {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #ff6a00;
+    margin: 20px 0;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.modal-content button {
+    background: #ff6a00;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* MINIBLOG */
+.miniblog {
+    margin: 150px auto 0;
+    max-width: 900px;
+    text-align: center;
+}
+
+.miniblog h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 28px;
+    color: #ff6a00;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.miniblog p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--detail-text);
+}
+
+.light-mode .miniblog p {
+    color: #333;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+FEVER BRASIL
+</div>
+
+<div class="header-buttons">
+<button onclick="openContactModal()">Fale Conosco</button>
+{% if user.is_authenticated %}
+    <button data-url="{% url 'gerenciar_perfil' %}" onclick="window.location.href=this.dataset.url">Meu Perfil</button>
+    <button onclick="window.location.href='/logout/'" style="border-color: #ff4444; color: #ff4444;">Sair</button>
+{% else %}
+    <button onclick="window.location.href='/login/'"> Login</button>
+{% endif %}
+<button onclick="window.location.href='/cadastro/'">+ Anunciar</button>
+</div>
+
+</header>
+
+<div class="container">
+
+<!-- PLANOS -->
+
+<div class="planos">
+
+<div class="plano destaque">
+<h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ff6a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> DESTAQUE</h3>
+<p>Aumente sua Visibilidade</p>
+<p>Destaque seu perfil e receba mais visualizações e contatos!</p>
+<button onclick="openPlanModal('destaque')">Saiba Mais</button>
+</div>
+
+<div class="plano premium">
+<h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0bbf4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"></path><path d="M11 3v6M13 3v6M2 9h20M12 22V9"></path></svg> PREMIUM</h3>
+<p>Plano VIP Exclusivo</p>
+<p>Recursos exclusivos: múltiplas fotos, vídeos e prioridade!</p>
+<button onclick="openPlanModal('premium')">Assinar Agora</button>
+</div>
+
+<div class="plano verificado">
+<h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2f6cff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg> VERIFICAÇÃO</h3>
+<p>Perfil Verificado</p>
+<p>Ganhe confiança com o selo verificado.</p>
+<button onclick="openPlanModal('verificado')">Verificar agora</button>
+</div>
+
+</div>
+
+<!-- BANNER ARTE ANUNCIE -->
+<div class="banner-anuncie">
+    <h2>SEJA UM PATROCINADOR</h2>
+    <p>Divulgue sua marca para milhares de pessoas no maior portal do Brasil!</p>
+    <button onclick="openAdsModal()" style="background: #fff; color: #ff6a00; padding: 15px 40px; border: none; border-radius: 30px; font-weight: 900; font-size: 18px; cursor: pointer; text-transform: uppercase; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: transform 0.2s;">Quero Patrocinar</button>
+</div>
+
+    <!-- Perfis em Destaque -->
+    <div class="top-banner">TOPS FEVER</div>
+    <div class="perfil-area">
+        {% for perfil in top_geral %}        
+        <div class="card" data-url="{% url 'perfil_detalhe' perfil.id %}" onclick="window.location.href=this.dataset.url" data-images="{% if perfil.foto %}{{ perfil.foto.url }}{% else %}https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80{% endif %},{% if perfil.foto2 %}{{ perfil.foto2.url }}{% else %}https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=764&q=80{% endif %}">
+            <div class="top-badge">
+                🏆 TOP GERAL
+            </div>
+            <div class="online-badge">Disponível</div>
+            <div class="card-image-wrapper">
+                <img class="img-base" src="{% if perfil.foto %}{{ perfil.foto.url }}{% else %}https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80{% endif %}" alt="{{ perfil.nome }}" />
+                <img class="img-overlay" src="" alt="" />
+            </div>
+            <div class="card-info">
+                <div class="nome">{{ perfil.nome }}</div>
+                <div class="detalhes">{{ perfil.idade }} anos • {{ perfil.cidade.nome }} / {{ perfil.estado.uf }}</div>
+                <div class="preco">R$ {% widthratio perfil.preco 100 1 %}/hora</div>
+                <div class="card-buttons">
+                    <button class="ligar"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/></svg> Ver Telefone</button>
+                    <button class="whats">WhatsApp</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% for perfil in top_destaques %}
+        <div class="card" data-url="{% url 'perfil_detalhe' perfil.id %}" onclick="window.location.href=this.dataset.url" data-images="{% if perfil.foto %}{{ perfil.foto.url }}{% else %}https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=764&q=80{% endif %},{% if perfil.foto2 %}{{ perfil.foto2.url }}{% else %}https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80{% endif %}">
+            <div class="top-badge" style="background:linear-gradient(90deg,#ff6a00,#ff9a00);">
+                ⭐ DESTAQUE
+            </div>
+            <div class="online-badge">Disponível</div>
+            <div class="card-image-wrapper">
+                <img class="img-base" src="{% if perfil.foto %}{{ perfil.foto.url }}{% else %}https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=764&q=80{% endif %}" alt="{{ perfil.nome }}" />
+                <img class="img-overlay" src="" alt="" />
+            </div>
+            <div class="card-info">
+                <div class="nome">{{ perfil.nome }}</div>
+                <div class="detalhes">{{ perfil.idade }} anos • {{ perfil.cidade.nome }} / {{ perfil.estado.uf }}</div>
+                <div class="preco">R$ {% widthratio perfil.preco 100 1 %}/hora</div>
+                <div class="card-buttons">
+                <button class="ligar"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/></svg> Ver Telefone</button>
+                    <button class="whats">WhatsApp</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+<!-- BUSCA -->
+
+<div class="busca">
+
+<input type="text" placeholder="Busque estado ou cidade">
+
+<select>
+<option>Todos os estados</option>
+<option value="AC">Acre</option>
+<option value="AL">Alagoas</option>
+<option value="AP">Amapá</option>
+<option value="AM">Amazonas</option>
+<option value="BA">Bahia</option>
+<option value="CE">Ceará</option>
+<option value="DF">Distrito Federal</option>
+<option value="ES">Espírito Santo</option>
+<option value="GO">Goiás</option>
+<option value="MA">Maranhão</option>
+<option value="MT">Mato Grosso</option>
+<option value="MS">Mato Grosso do Sul</option>
+<option value="MG">Minas Gerais</option>
+<option value="PA">Pará</option>
+<option value="PB">Paraíba</option>
+<option value="PR">Paraná</option>
+<option value="PE">Pernambuco</option>
+<option value="PI">Piauí</option>
+<option value="RJ">Rio de Janeiro</option>
+<option value="RN">Rio Grande do Norte</option>
+<option value="RS">Rio Grande do Sul</option>
+<option value="RO">Rondônia</option>
+<option value="RR">Roraima</option>
+<option value="SC">Santa Catarina</option>
+<option value="SP">São Paulo</option>
+<option value="SE">Sergipe</option>
+<option value="TO">Tocantins</option>
+</select>
+
+<select>
+<option>Todas as cidades</option>
+<!-- AC -->
+<option data-estado="AC">Rio Branco</option>
+<option data-estado="AC">Cruzeiro do Sul</option>
+<!-- AL -->
+<option data-estado="AL">Maceió</option>
+<option data-estado="AL">Arapiraca</option>
+<option data-estado="AL">Maragogi</option>
+<!-- AP -->
+<option data-estado="AP">Macapá</option>
+<option data-estado="AP">Santana</option>
+<!-- AM -->
+<option data-estado="AM">Manaus</option>
+<option data-estado="AM">Parintins</option>
+<option data-estado="AM">Itacoatiara</option>
+<!-- BA -->
+<option data-estado="BA">Salvador</option>
+<option data-estado="BA">Feira de Santana</option>
+<option data-estado="BA">Vitória da Conquista</option>
+<option data-estado="BA">Camaçari</option>
+<option data-estado="BA">Itabuna</option>
+<option data-estado="BA">Juazeiro</option>
+<option data-estado="BA">Ilhéus</option>
+<option data-estado="BA">Porto Seguro</option>
+<!-- CE -->
+<option data-estado="CE">Fortaleza</option>
+<option data-estado="CE">Caucaia</option>
+<option data-estado="CE">Juazeiro do Norte</option>
+<option data-estado="CE">Sobral</option>
+<!-- DF -->
+<option data-estado="DF">Brasília</option>
+<option data-estado="DF">Taguatinga</option>
+<option data-estado="DF">Ceilândia</option>
+<option data-estado="DF">Águas Claras</option>
+<!-- ES -->
+<option data-estado="ES">Vitória</option>
+<option data-estado="ES">Vila Velha</option>
+<option data-estado="ES">Serra</option>
+<option data-estado="ES">Cariacica</option>
+<option data-estado="ES">Guarapari</option>
+<!-- GO -->
+<option data-estado="GO">Goiânia</option>
+<option data-estado="GO">Aparecida de Goiânia</option>
+<option data-estado="GO">Anápolis</option>
+<option data-estado="GO">Rio Verde</option>
+<option data-estado="GO">Caldas Novas</option>
+<!-- MA -->
+<option data-estado="MA">São Luís</option>
+<option data-estado="MA">Imperatriz</option>
+<!-- MT -->
+<option data-estado="MT">Cuiabá</option>
+<option data-estado="MT">Várzea Grande</option>
+<option data-estado="MT">Rondonópolis</option>
+<option data-estado="MT">Sinop</option>
+<!-- MS -->
+<option data-estado="MS">Campo Grande</option>
+<option data-estado="MS">Dourados</option>
+<option data-estado="MS">Três Lagoas</option>
+<option data-estado="MS">Bonito</option>
+<!-- MG -->
+<option data-estado="MG">Belo Horizonte</option>
+<option data-estado="MG">Uberlândia</option>
+<option data-estado="MG">Contagem</option>
+<option data-estado="MG">Juiz de Fora</option>
+<option data-estado="MG">Betim</option>
+<option data-estado="MG">Montes Claros</option>
+<option data-estado="MG">Uberaba</option>
+<option data-estado="MG">Governador Valadares</option>
+<option data-estado="MG">Ouro Preto</option>
+<!-- PA -->
+<option data-estado="PA">Belém</option>
+<option data-estado="PA">Ananindeua</option>
+<option data-estado="PA">Santarém</option>
+<option data-estado="PA">Marabá</option>
+<!-- PB -->
+<option data-estado="PB">João Pessoa</option>
+<option data-estado="PB">Campina Grande</option>
+<!-- PR -->
+<option data-estado="PR">Curitiba</option>
+<option data-estado="PR">Londrina</option>
+<option data-estado="PR">Maringá</option>
+<option data-estado="PR">Ponta Grossa</option>
+<option data-estado="PR">Cascavel</option>
+<option data-estado="PR">Foz do Iguaçu</option>
+<!-- PE -->
+<option data-estado="PE">Recife</option>
+<option data-estado="PE">Jaboatão dos Guararapes</option>
+<option data-estado="PE">Olinda</option>
+<option data-estado="PE">Caruaru</option>
+<option data-estado="PE">Petrolina</option>
+<option data-estado="PE">Porto de Galinhas</option>
+<!-- PI -->
+<option data-estado="PI">Teresina</option>
+<option data-estado="PI">Parnaíba</option>
+<!-- RJ -->
+<option data-estado="RJ">Rio de Janeiro</option>
+<option data-estado="RJ">São Gonçalo</option>
+<option data-estado="RJ">Duque de Caxias</option>
+<option data-estado="RJ">Nova Iguaçu</option>
+<option data-estado="RJ">Niterói</option>
+<option data-estado="RJ">Belford Roxo</option>
+<option data-estado="RJ">Campos dos Goytacazes</option>
+<option data-estado="RJ">Petrópolis</option>
+<option data-estado="RJ">Cabo Frio</option>
+<option data-estado="RJ">Búzios</option>
+<option data-estado="RJ">Angra dos Reis</option>
+<!-- RN -->
+<option data-estado="RN">Natal</option>
+<option data-estado="RN">Mossoró</option>
+<option data-estado="RN">Pipa</option>
+<!-- RS -->
+<option data-estado="RS">Porto Alegre</option>
+<option data-estado="RS">Caxias do Sul</option>
+<option data-estado="RS">Canoas</option>
+<option data-estado="RS">Pelotas</option>
+<option data-estado="RS">Santa Maria</option>
+<option data-estado="RS">Gramado</option>
+<!-- RO -->
+<option data-estado="RO">Porto Velho</option>
+<option data-estado="RO">Ji-Paraná</option>
+<!-- RR -->
+<option data-estado="RR">Boa Vista</option>
+<!-- SC -->
+<option data-estado="SC">Florianópolis</option>
+<option data-estado="SC">Joinville</option>
+<option data-estado="SC">Blumenau</option>
+<option data-estado="SC">São José</option>
+<option data-estado="SC">Chapecó</option>
+<option data-estado="SC">Balneário Camboriú</option>
+<!-- SP -->
+<option data-estado="SP">São Paulo</option>
+<option data-estado="SP">Guarulhos</option>
+<option data-estado="SP">Campinas</option>
+<option data-estado="SP">São Bernardo do Campo</option>
+<option data-estado="SP">Osasco</option>
+<option data-estado="SP">Santo André</option>
+<option data-estado="SP">São José dos Campos</option>
+<option data-estado="SP">Ribeirão Preto</option>
+<option data-estado="SP">Santos</option>
+<option data-estado="SP">Sorocaba</option>
+<option data-estado="SP">Jundiaí</option>
+<option data-estado="SP">Piracicaba</option>
+<option data-estado="SP">Bauru</option>
+<option data-estado="SP">São José do Rio Preto</option>
+<option data-estado="SP">Praia Grande</option>
+<option data-estado="SP">Guarujá</option>
+<!-- SE -->
+<option data-estado="SE">Aracaju</option>
+<!-- TO -->
+<option data-estado="TO">Palmas</option>
+<option data-estado="TO">Araguaína</option>
+</select>
+
+</div>
+
+<div class="resultado">
+1 perfil encontrado
+</div>
+
+<!-- Perfis Normais -->
+<div class="perfil-area">
+    {% for perfil in perfis_comuns %}
+    <div class="card" style="border-color: #333;" data-url="{% url 'perfil_detalhe' perfil.id %}" onclick="window.location.href=this.dataset.url" data-images="{% if perfil.foto %}{{ perfil.foto.url }}{% else %}https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80{% endif %},{% if perfil.foto2 %}{{ perfil.foto2.url }}{% else %}https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80{% endif %}">
+        <div class="online-badge">Disponível</div>
+        <div class="card-image-wrapper">
+            <img class="img-base" src="{% if perfil.foto %}{{ perfil.foto.url }}{% else %}https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80{% endif %}" alt="{{ perfil.nome }}" />
+            <img class="img-overlay" src="" alt="" />
+        </div>
+        <div class="card-info">
+            <div class="nome">{{ perfil.nome }}</div>
+            <div class="detalhes">{{ perfil.idade }} anos • {{ perfil.cidade.nome }} / {{ perfil.estado.uf }}</div>
+            <div class="preco">R$ {% widthratio perfil.preco 100 1 %}/hora</div>
+            <div class="card-buttons">
+                    <button class="ligar"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/></svg> Ver Telefone</button>
+                <button class="whats">WhatsApp</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- MINIBLOG -->
+<div class="miniblog">
+    <h2>A Arte da Sedução: Profissionalismo e Empoderamento</h2>
+    <p>A sensualidade é uma poderosa forma de expressão, uma dança entre confiança e mistério. Longe de ser apenas um atributo físico, é uma energia que emana de dentro, uma celebração da autoestima e do autoconhecimento. No universo do acompanhamento, essa arte é exercida com profissionalismo, onde a conexão e o respeito são a base de cada interação. É sobre criar experiências memoráveis, onde a beleza da companhia se une à inteligência emocional e à elegância. Valorizamos a autonomia e a força de quem escolhe essa profissão, transformando a sensualidade em uma ferramenta de empoderamento e independência.</p>
+</div>
+
+</div>
+
+<!-- FOOTER -->
+
+<div class="footer">
+    <p class="warning">Site para maiores de 18 anos</p>
+    <p>&copy; 2026 Ferver Brasil - Todos os direitos reservados</p>
+</div>
+
+<!-- MODAL CONTATO -->
+<div id="contactModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeContactModal()">&times;</span>
+    <h2>Fale Conosco</h2>
+    <p>Entre em contato conosco através do email:</p>
+    <p class="email-destaque">mikelsbprocash@gmail.com</p>
+    <button onclick="window.location.href='mailto:mikelsbprocash@gmail.com'">Enviar Email</button>
+  </div>
+</div>
+
+<!-- MODAL ADS (PATROCINADOR) -->
+<div id="adsModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeAdsModal()">&times;</span>
+    <h2>Divulgue sua Marca</h2>
+    <p>Para anunciar sua marca ou empresa, entre em contato:</p>
+    <p class="email-destaque">mikelsbprocash@gmail.com</p>
+    <button onclick="window.location.href='mailto:mikelsbprocash@gmail.com?subject=Interesse em Anunciar Marca'">Enviar Email</button>
+  </div>
+</div>
+
+<!-- MODAL PLANOS -->
+<div id="planModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closePlanModal()">&times;</span>
+    <h2 id="planTitle">Título do Plano</h2>
+    <p id="planDesc" style="margin-bottom: 20px; color: #ccc;">Descrição do plano.</p>
+    <p class="email-destaque" id="planPrice">R$ 0,00</p>
+    <button id="btnContratar">Contratar Agora</button>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const estadoSelect = document.querySelector('.busca select:first-of-type');
+    const cidadeSelect = document.querySelector('.busca select:last-of-type');
+
+    estadoSelect.addEventListener('change', function() {
+        const selectedUf = this.value;
+        const options = cidadeSelect.querySelectorAll('option');
+
+        options.forEach(option => {
+            if (option.value === 'Todas as cidades' || option.getAttribute('data-estado') === selectedUf) {
+                option.style.display = 'block';
+            } else {
+                option.style.display = 'none';
+            }
+        });
+        cidadeSelect.value = 'Todas as cidades';
+    });
+});
+
+function openContactModal() {
+    document.getElementById('contactModal').style.display = 'block';
+}
+
+function closeContactModal() {
+    document.getElementById('contactModal').style.display = 'none';
+}
+
+function openAdsModal() {
+    document.getElementById('adsModal').style.display = 'block';
+}
+
+function closeAdsModal() {
+    document.getElementById('adsModal').style.display = 'none';
+}
+
+const planData = {
+    'destaque': {
+        title: '⭐ Plano Destaque',
+        desc: 'Seu perfil aparecerá no topo das buscas e na página inicial por 7 dias. Aumente suas visualizações em até 5x!',
+        price: 'R$ 149,90 / semana'
+    },
+    'premium': {
+        title: '💎 Plano Premium',
+        desc: 'Upload ilimitado de fotos, vídeos na galeria e destaque com borda especial por 30 dias.',
+        price: 'R$ 99,90 / mês'
+    },
+    'verificado': {
+        title: '✅ Verificação',
+        desc: 'Selo de autenticidade para passar mais confiança aos clientes. Taxa única de validação.',
+        price: 'R$ 49,90'
+    }
+};
+
+function openPlanModal(type) {
+    const data = planData[type];
+    document.getElementById('planTitle').innerText = data.title;
+    document.getElementById('planDesc').innerText = data.desc;
+    document.getElementById('planPrice').innerText = data.price;
+    
+    // Atualiza o botão para redirecionar para a view do Django
+    document.getElementById('btnContratar').onclick = function() {
+        const userIsAuthenticated = "{{ user.is_authenticated }}" === "True";
+        
+        if (userIsAuthenticated) {
+            // Usuário logado: vai direto para o checkout
+            window.location.href = "/checkout/" + type + "/";
+        } else {
+            // Usuário não logado: confirmação e redireciona para login com ?next=
+            if(confirm("Você precisa estar logado para contratar um plano. Deseja fazer login agora?")) {
+                window.location.href = "/login/?next=/checkout/" + type + "/";
+            }
+        }
+    };
+    
+    document.getElementById('planModal').style.display = 'block';
+}
+
+function closePlanModal() {
+    document.getElementById('planModal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    const contactModal = document.getElementById('contactModal');
+    const adsModal = document.getElementById('adsModal');
+    const planModal = document.getElementById('planModal');
+    if (event.target == contactModal) {
+        contactModal.style.display = "none";
+    }
+    if (event.target == adsModal) {
+        adsModal.style.display = "none";
+    }
+    if (event.target == planModal) {
+        planModal.style.display = "none";
+    }
+}
+
+// --- SLIDESHOW AUTOMÁTICO NO HOVER ---
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('.card').forEach(card => {
+        const imagesAttr = card.getAttribute('data-images');
+        if (!imagesAttr) return;
+        
+        // Cria lista de fotos (remove vazios e espaços)
+        const images = imagesAttr.split(',').map(url => url.trim()).filter(url => url.length > 0);
+        
+        // Só ativa se tiver pelo menos 2 fotos
+        if (images.length < 2) return;
+
+        // Preload das imagens para evitar delay na primeira troca
+        images.forEach(src => { const i = new Image(); i.src = src; });
+
+        const imgBase = card.querySelector('.img-base');
+        const imgOverlay = card.querySelector('.img-overlay');
+        let interval;
+        let currentIndex = 0;
+
+        card.addEventListener('mouseenter', () => {
+            // Inicia o ciclo
+            interval = setInterval(() => {
+                // Próxima imagem
+                let nextIndex = (currentIndex + 1) % images.length;
+                
+                // Carrega a próxima imagem no overlay (que está invisível)
+                imgOverlay.src = images[nextIndex];
+                
+                // Faz o overlay aparecer suavemente (fade-in)
+                imgOverlay.style.opacity = 1;
+
+                // Depois que a transição terminar, atualiza a base e reseta o overlay
+                setTimeout(() => {
+                    imgBase.src = images[nextIndex]; // Base assume a nova foto
+                    imgOverlay.style.transition = 'none'; // Remove transição para reset instantâneo
+                    imgOverlay.style.opacity = 0; // Esconde overlay
+                    setTimeout(() => { imgOverlay.style.transition = 'opacity 0.8s ease-in-out, transform 0.8s ease-in-out'; }, 50); // Restaura transição
+                    currentIndex = nextIndex;
+                }, 800); // Tempo igual ao transition do CSS (0.8s)
+
+            }, 2000); // Tempo total de cada foto
+        });
+
+        card.addEventListener('mouseleave', () => {
+            // Para o ciclo e volta para a primeira foto
+            clearInterval(interval);
+            currentIndex = 0;
+            imgBase.src = images[0];
+            imgOverlay.style.opacity = 0;
+            imgOverlay.src = "";
+        });
+    });
+});
+</script>
+
+</body>
+</html>

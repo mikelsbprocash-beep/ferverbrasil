@@ -1,0 +1,254 @@
+{% extends "ferver/base.html" %}
+
+{% block title %}Criar Novo Anúncio – FERVER{% endblock %}
+
+{% block content %}
+<style>
+    /* Estilos personalizados para combinar com o tema do site */
+    :root {
+        --primary-orange: #ff6a00;
+        --dark-bg: #000000;
+        --card-bg: #0d1b2a;
+        --input-bg: #111d30;
+        --text-white: #ffffff;
+        --text-gray: #cccccc;
+    }
+
+    body {
+        background: linear-gradient(135deg, #ff6a00 0%, #ff8800 40%, #ffffff 100%);
+        background-attachment: fixed;
+        font-family: 'Montserrat', Arial, sans-serif;
+    }
+
+    .cadastro-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: rgba(13, 27, 42, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        border: 1px solid rgba(255, 106, 0, 0.5);
+        color: var(--text-white);
+        position: relative;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        background: none;
+        border: none;
+        color: var(--text-gray);
+        font-size: 30px;
+        cursor: pointer;
+        transition: color 0.3s;
+    }
+
+    .close-btn:hover {
+        color: var(--primary-orange);
+    }
+
+    h1 {
+        text-align: center;
+        color: var(--primary-orange);
+        margin-bottom: 30px;
+        font-size: 36px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 900;
+        font-family: Impact, Arial Black, sans-serif;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    form label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        font-size: 14px;
+        color: var(--text-white);
+        margin-top: 15px;
+    }
+
+    form label span {
+        font-weight: normal;
+        color: var(--text-gray);
+        font-size: 12px;
+    }
+
+    form input[type="text"],
+    form input[type="number"],
+    form textarea,
+    form select,
+    form input[type="file"] {
+        width: 100%;
+        padding: 12px 15px;
+        background: var(--input-bg);
+        border: 1px solid #333;
+        border-radius: 8px;
+        color: var(--text-white);
+        font-size: 14px;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+    }
+
+    form input:focus,
+    form textarea:focus {
+        outline: none;
+        border-color: var(--primary-orange);
+    }
+
+    form textarea {
+        height: 100px;
+        resize: vertical;
+    }
+
+    .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .hint {
+        display: block;
+        color: var(--text-gray);
+        font-size: 11px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    .check-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+        background: var(--input-bg);
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #333;
+    }
+
+    .check-group input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        accent-color: var(--primary-orange);
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .check-group label {
+        margin: 0;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    button[type="submit"] {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(90deg, #ff6a00, #ff9a00);
+        color: white;
+        border: none;
+        border-radius: 30px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 30px;
+        transition: transform 0.2s, box-shadow 0.2s;
+        text-transform: uppercase;
+    }
+
+    button[type="submit"]:hover {
+        transform: scale(1.02);
+        box-shadow: 0 0 20px rgba(255, 106, 0, 0.4);
+    }
+
+    @media (max-width: 600px) {
+        .grid2 {
+            grid-template-columns: 1fr;
+        }
+        .cadastro-container {
+            margin: 20px;
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="cadastro-container">
+    <button type="button" class="close-btn" onclick="window.history.back()">&times;</button>
+
+    <h1>🔥 Criar Anúncio</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <label>Foto de perfil que vai ser anunciado * <span>(máximo 5MB, JPEG/PNG)</span></label>
+    <input type="file" name="foto" required accept="image/*">
+    <small class="hint">Envie apenas 1 imagem. plano grátis permite somente uma foto.</small>
+
+    <label>Segunda Foto (opcional) <span>(máximo 5MB, JPEG/PNG)</span></label>
+    <input type="file" name="foto2" accept="image/*">
+    <small class="hint">Esta foto aparecerá quando passarem o mouse sobre o seu card.</small>
+
+    <label>Documento de identidade * <span>(máximo 5MB, JPG/PDF)</span></label>
+    <input type="file" name="documento" required accept="image/*,application/pdf">
+    <small class="hint">Carteira de identidade, CNH ou passaporte.</small>
+
+    <label>E-mail de Login *</label>
+    <input type="email" name="email" required placeholder="Seu e-mail para entrar na conta">
+
+    <label>Senha de Acesso *</label>
+    <input type="password" name="senha" required placeholder="Crie uma senha segura">
+
+    <div class="grid2">
+        <div>
+            <label>Nome *</label>
+            <input type="text" name="nome" placeholder="Nome artístico">
+        </div>
+        <div>
+            <label>Idade *</label>
+            <input type="number" name="idade" placeholder="25">
+        </div>
+    </div>
+
+    <label>Cidade *</label>
+    <input type="text" name="cidade" placeholder="Ex: São Paulo">
+
+    <label>Descrição</label>
+    <textarea name="descricao" placeholder="Descreva seus serviços e diferenciais..."></textarea>
+
+    <div class="grid2">
+        <div>
+            <label>Telefone *</label>
+            <input type="text" name="telefone" placeholder="(11) 98765-4321">
+        </div>
+        <div>
+            <label>WhatsApp</label>
+            <input type="text" name="whatsapp" placeholder="5511987654321">
+        </div>
+    </div>
+
+    <label>Valor</label>
+    <input type="text" name="valor" placeholder="R$ 300/hora">
+
+    <div class="check-group">
+        <input type="checkbox" name="maioridade" required>
+        <label>Declaro que sou maior de 18 anos</label>
+    </div>
+
+    <div class="check-group">
+        <input type="checkbox" name="ativo" checked>
+        <label>Disponível para atendimento agora</label>
+    </div>
+
+    <button type="submit">Publicar Anúncio</button>
+
+    </form>
+
+    <div style="text-align: center; margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+        <p style="color: var(--text-gray); font-size: 14px; margin-bottom: 15px;">Já possui cadastro?</p>
+        <button type="button" onclick="window.location.href='/login/'" style="background: transparent; border: 2px solid var(--primary-orange); color: var(--primary-orange); width: auto; padding: 10px 40px; margin-top: 0;">Fazer Login</button>
+    </div>
+
+</div>
+
+{% endblock %}

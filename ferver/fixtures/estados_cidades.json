@@ -1,0 +1,586 @@
+[
+  {
+    "model": "ferver.estado",
+    "pk": 1,
+    "fields": {
+      "nome": "Acre",
+      "uf": "AC"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 2,
+    "fields": {
+      "nome": "Alagoas",
+      "uf": "AL"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 3,
+    "fields": {
+      "nome": "Amapá",
+      "uf": "AP"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 4,
+    "fields": {
+      "nome": "Amazonas",
+      "uf": "AM"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 5,
+    "fields": {
+      "nome": "Bahia",
+      "uf": "BA"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 6,
+    "fields": {
+      "nome": "Ceará",
+      "uf": "CE"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 7,
+    "fields": {
+      "nome": "Distrito Federal",
+      "uf": "DF"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 8,
+    "fields": {
+      "nome": "Espírito Santo",
+      "uf": "ES"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 9,
+    "fields": {
+      "nome": "Goiás",
+      "uf": "GO"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 10,
+    "fields": {
+      "nome": "Maranhão",
+      "uf": "MA"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 11,
+    "fields": {
+      "nome": "Mato Grosso",
+      "uf": "MT"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 12,
+    "fields": {
+      "nome": "Mato Grosso do Sul",
+      "uf": "MS"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 13,
+    "fields": {
+      "nome": "Minas Gerais",
+      "uf": "MG"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 14,
+    "fields": {
+      "nome": "Pará",
+      "uf": "PA"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 15,
+    "fields": {
+      "nome": "Paraíba",
+      "uf": "PB"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 16,
+    "fields": {
+      "nome": "Paraná",
+      "uf": "PR"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 17,
+    "fields": {
+      "nome": "Pernambuco",
+      "uf": "PE"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 18,
+    "fields": {
+      "nome": "Piauí",
+      "uf": "PI"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 19,
+    "fields": {
+      "nome": "Rio de Janeiro",
+      "uf": "RJ"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 20,
+    "fields": {
+      "nome": "Rio Grande do Norte",
+      "uf": "RN"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 21,
+    "fields": {
+      "nome": "Rio Grande do Sul",
+      "uf": "RS"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 22,
+    "fields": {
+      "nome": "Rondônia",
+      "uf": "RO"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 23,
+    "fields": {
+      "nome": "Roraima",
+      "uf": "RR"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 24,
+    "fields": {
+      "nome": "Santa Catarina",
+      "uf": "SC"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 25,
+    "fields": {
+      "nome": "São Paulo",
+      "uf": "SP"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 26,
+    "fields": {
+      "nome": "Sergipe",
+      "uf": "SE"
+    }
+  },
+  {
+    "model": "ferver.estado",
+    "pk": 27,
+    "fields": {
+      "nome": "Tocantins",
+      "uf": "TO"
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 1,
+    "fields": {
+      "nome": "Rio Branco",
+      "estado": 1
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 2,
+    "fields": {
+      "nome": "Maceió",
+      "estado": 2
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 3,
+    "fields": {
+      "nome": "Macapá",
+      "estado": 3
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 4,
+    "fields": {
+      "nome": "Manaus",
+      "estado": 4
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 5,
+    "fields": {
+      "nome": "Parintins",
+      "estado": 4
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 6,
+    "fields": {
+      "nome": "Salvador",
+      "estado": 5
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 7,
+    "fields": {
+      "nome": "Fortaleza",
+      "estado": 6
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 8,
+    "fields": {
+      "nome": "Brasília",
+      "estado": 7
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 9,
+    "fields": {
+      "nome": "Vitória",
+      "estado": 8
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 10,
+    "fields": {
+      "nome": "Vila Velha",
+      "estado": 8
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 11,
+    "fields": {
+      "nome": "Goiânia",
+      "estado": 9
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 12,
+    "fields": {
+      "nome": "São Luís",
+      "estado": 10
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 13,
+    "fields": {
+      "nome": "Cuiabá",
+      "estado": 11
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 14,
+    "fields": {
+      "nome": "Várzea Grande",
+      "estado": 11
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 15,
+    "fields": {
+      "nome": "Campo Grande",
+      "estado": 12
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 16,
+    "fields": {
+      "nome": "Belo Horizonte",
+      "estado": 13
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 17,
+    "fields": {
+      "nome": "Uberlândia",
+      "estado": 13
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 18,
+    "fields": {
+      "nome": "Contagem",
+      "estado": 13
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 19,
+    "fields": {
+      "nome": "Juiz de Fora",
+      "estado": 13
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 20,
+    "fields": {
+      "nome": "Betim",
+      "estado": 13
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 21,
+    "fields": {
+      "nome": "Belém",
+      "estado": 14
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 22,
+    "fields": {
+      "nome": "João Pessoa",
+      "estado": 15
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 23,
+    "fields": {
+      "nome": "Curitiba",
+      "estado": 16
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 24,
+    "fields": {
+      "nome": "Recife",
+      "estado": 17
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 25,
+    "fields": {
+      "nome": "Jaboatão dos Guararapes",
+      "estado": 17
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 26,
+    "fields": {
+      "nome": "Teresina",
+      "estado": 18
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 27,
+    "fields": {
+      "nome": "Rio de Janeiro",
+      "estado": 19
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 28,
+    "fields": {
+      "nome": "São Gonçalo",
+      "estado": 19
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 29,
+    "fields": {
+      "nome": "Duque de Caxias",
+      "estado": 19
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 30,
+    "fields": {
+      "nome": "Nova Iguaçu",
+      "estado": 19
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 31,
+    "fields": {
+      "nome": "Natal",
+      "estado": 20
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 32,
+    "fields": {
+      "nome": "Porto Alegre",
+      "estado": 21
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 33,
+    "fields": {
+      "nome": "Porto Velho",
+      "estado": 22
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 34,
+    "fields": {
+      "nome": "Boa Vista",
+      "estado": 23
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 35,
+    "fields": {
+      "nome": "Florianópolis",
+      "estado": 24
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 36,
+    "fields": {
+      "nome": "Joinville",
+      "estado": 24
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 37,
+    "fields": {
+      "nome": "São Paulo",
+      "estado": 25
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 38,
+    "fields": {
+      "nome": "Guarulhos",
+      "estado": 25
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 39,
+    "fields": {
+      "nome": "Campinas",
+      "estado": 25
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 40,
+    "fields": {
+      "nome": "São Bernardo do Campo",
+      "estado": 25
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 41,
+    "fields": {
+      "nome": "Osasco",
+      "estado": 25
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 42,
+    "fields": {
+      "nome": "Santo André",
+      "estado": 25
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 43,
+    "fields": {
+      "nome": "São José dos Campos",
+      "estado": 25
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 44,
+    "fields": {
+      "nome": "Ribeirão Preto",
+      "estado": 25
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 45,
+    "fields": {
+      "nome": "Aracaju",
+      "estado": 26
+    }
+  },
+  {
+    "model": "ferver.cidade",
+    "pk": 46,
+    "fields": {
+      "nome": "Palmas",
+      "estado": 27
+    }
+  }
+]
