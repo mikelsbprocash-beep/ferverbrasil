@@ -27,7 +27,7 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Preencha com o domínio do seu site. Ex: ['www.seusite.com.br', 'seusite.com.br']
 ALLOWED_HOSTS = ['ferverbrasil.com.br', 'www.ferverbrasil.com.br', '127.0.0.1', 'localhost']
