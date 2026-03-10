@@ -6,7 +6,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 import re
-import mercadopago
+from .services import MercadoPagoService
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
@@ -203,11 +203,8 @@ def cadastrar_perfil(request):
     return render(request, "ferver/cadastro.html")
 
 
-def ferver_view(request):
-    # Separa os perfis para as diferentes seções do template
-    now = timezone.now()
-
-    # --- FILTROS DE BUSCA ---
+def _aplicar_filtros_busca(request):
+    """Helper para aplicar filtros de busca nos perfis."""
     estado_busca = request.GET.get('estado')
     cidade_busca = request.GET.get('cidade')
     termo_busca = request.GET.get('q')
@@ -222,6 +219,15 @@ def ferver_view(request):
         
     if termo_busca:
         filtros &= (Q(nome__icontains=termo_busca) | Q(cidade__nome__icontains=termo_busca) | Q(estado__nome__icontains=termo_busca))
+    
+    return filtros
+
+def ferver_view(request):
+    # Separa os perfis para as diferentes seções do template
+    now = timezone.now()
+
+    # --- FILTROS DE BUSCA ---
+    filtros = _aplicar_filtros_busca(request)
 
     # 1. Pega os perfis TOP GERAL (maior prioridade) - Aplicando filtros também
     top_geral = Perfil.objects.filter(filtros, top_geral=True).order_by('-criado_em')[:5]
@@ -255,71 +261,17 @@ def ferver_view(request):
 def checkout_plano(request, tipo_plano):
     print(f"--- CHECKOUT INICIADO: Plano '{tipo_plano}' para usuário '{request.user}' ---")
 
-    if not settings.MERCADOPAGO_ACCESS_TOKEN:
-        print("ERRO CRÍTICO: Token do Mercado Pago não encontrado no .env")
-        return redirect('ferver')
-
-    # Substitua pelo seu ACCESS TOKEN de Produção ou Teste do Mercado Pago
-    sdk = mercadopago.SDK(settings.MERCADOPAGO_ACCESS_TOKEN)
-
-    # Define preços e títulos baseados no plano
-    planos = {
-        'destaque': {'titulo': 'Plano Destaque (7 dias)', 'preco': 149.90},
-        'premium': {'titulo': 'Plano Premium (30 dias)', 'preco': 99.90},
-        'verificado': {'titulo': 'Taxa de Verificação', 'preco': 49.90},
-    }
-
-    if tipo_plano not in planos:
-        return redirect('ferver')
-
-    dados_plano = planos[tipo_plano]
-    
     perfil = Perfil.objects.filter(usuario=request.user).first()
     if not perfil:
-        # Se o usuário logado não tem perfil, manda criar um
         return redirect('cadastro')
 
-    # Cria a preferência de pagamento
-    # IMPORTANTE: Vincula o pagamento ao ID do perfil e ao tipo de plano
-    external_ref = f"{perfil.id}_{tipo_plano}"
-
-    preference_data = {
-        "items": [
-            {
-                "title": dados_plano['titulo'],
-                "quantity": 1,
-                "unit_price": float(dados_plano['preco']),
-                "currency_id": "BRL"
-            }
-        ],
-        "payer": {
-            "email": request.user.email or "email@teste.com"
-        },
-        "back_urls": {
-            "success": request.build_absolute_uri(reverse('sucesso_pagamento')),
-            "failure": request.build_absolute_uri(reverse('ferver')), # Volta para home em caso de falha
-            "pending": request.build_absolute_uri(reverse('ferver')), # Volta para home em caso de pendente
-        },
-        "external_reference": external_ref
-    }
-
-    # Lógica de segurança para evitar erro 400 em localhost com chave de Produção
-    # Se estiver usando chave de Produção (APP_USR) em localhost, NÃO ative o auto_return
-    is_production_token = not settings.MERCADOPAGO_ACCESS_TOKEN.startswith("TEST")
-    is_localhost = "127.0.0.1" in request.get_host() or "localhost" in request.get_host()
-
-    if not (is_production_token and is_localhost):
-        preference_data["auto_return"] = "approved"
-
-    preference_response = sdk.preference().create(preference_data)
-    preference = preference_response.get("response")
+    mp_service = MercadoPagoService()
+    preference = mp_service.criar_preferencia(request, perfil, tipo_plano)
 
     if not preference or "init_point" not in preference:
-        # Log de erro no terminal para debug
-        print("!!! ERRO MERCADO PAGO !!! Resposta:", preference_response)
-        # Redireciona de volta para evitar tela de erro, mas idealmente mostraria uma mensagem
-        # Se estiver em debug, mostra o erro na tela
-        return JsonResponse(preference_response or {"error": "Erro ao criar preferência no Mercado Pago"}, status=500)
+        print("!!! ERRO MERCADO PAGO !!! Falha ao criar preferência.")
+        # Redireciona para a home em vez de dar erro 500
+        return redirect('ferver')
 
     print(f"--- REDIRECIONANDO PARA MERCADO PAGO: {preference['init_point']} ---")
     return redirect(preference["init_point"])
@@ -332,23 +284,18 @@ def webhook_mercadopago(request):
     if request.method != "POST":
         return JsonResponse({"status": "error", "message": "Invalid method"}, status=405)
 
-    sdk = mercadopago.SDK(settings.MERCADOPAGO_ACCESS_TOKEN)
     topic = request.GET.get("topic") or request.GET.get("type")
     payment_id = request.GET.get("id") or request.GET.get("data.id")
 
     if not (topic == "payment" and payment_id):
         return JsonResponse({"status": "ok", "message": "Not a payment notification"})
 
-    try:
-        payment_info = sdk.payment().get(payment_id)
-    except Exception:
-        # Idealmente, logar o erro aqui
+    mp_service = MercadoPagoService()
+    dados = mp_service.verificar_pagamento(payment_id)
+    
+    if not dados:
         return JsonResponse({"status": "error", "message": "Failed to get payment info"}, status=500)
 
-    if payment_info.get("status") != 200:
-        return JsonResponse({"status": "error", "message": "MercadoPago API error"}, status=502)
-
-    dados = payment_info["response"]
     if dados.get("status") != "approved":
         return JsonResponse({"status": "ok", "message": "Payment not approved"})
 
