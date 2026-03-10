@@ -133,7 +133,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Compressão e cache de arquivos estáticos para produção
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
  
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
