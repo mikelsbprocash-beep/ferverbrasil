@@ -36,13 +36,12 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 # Preencha com o domínio do seu site. Ex: ['www.seusite.com.br', 'seusite.com.br']
 ALLOWED_HOSTS = ['ferverbrasil.com.br', 'www.ferverbrasil.com.br', '127.0.0.1', 'localhost']
 
+CSRF_TRUSTED_ORIGINS = ['https://ferverbrasil.com.br', 'https://www.ferverbrasil.com.br']
+
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
     CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_EXTERNAL_HOSTNAME}')
-
-CSRF_TRUSTED_ORIGINS = ['https://ferverbrasil.com.br', 'https://www.ferverbrasil.com.br']
-
 
 # Application definition
 
