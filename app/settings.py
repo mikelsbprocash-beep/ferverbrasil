@@ -89,12 +89,15 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        # Usa a DATABASE_URL do Render, ou o SQLite como padrão para desenvolvimento local
-        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+# Configuração para PostgreSQL (Render)
+if 'DATABASE_URL' in os.environ:
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -160,3 +163,18 @@ DEFAULT_FROM_EMAIL = f'Ferver Brasil <{EMAIL_HOST_USER}>' if EMAIL_HOST_USER els
 
 # URL de Login (para onde o @login_required redireciona)
 LOGIN_URL = '/login/'
+
+# Configuração de Logs para ver erros no Render
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}
