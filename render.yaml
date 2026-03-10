@@ -1,0 +1,28 @@
+databases:
+  - name: ferver_db
+    databaseName: ferver
+    user: ferver_user
+
+services:
+  - type: web
+    name: ferver-brasil
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn app.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.5
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ferver_db
+          property: connectionString
+      - key: MERCADOPAGO_ACCESS_TOKEN
+        sync: false
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
