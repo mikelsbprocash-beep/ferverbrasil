@@ -26,6 +26,9 @@ load_dotenv(BASE_DIR / '.env')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
+if not SECRET_KEY:
+    # Fallback de segurança para evitar erro 500 se a variável não carregar
+    SECRET_KEY = 'django-insecure-fallback-key-change-me-immediately'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
@@ -36,6 +39,7 @@ ALLOWED_HOSTS = ['ferverbrasil.com.br', 'www.ferverbrasil.com.br', '127.0.0.1', 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_EXTERNAL_HOSTNAME}')
 
 CSRF_TRUSTED_ORIGINS = ['https://ferverbrasil.com.br', 'https://www.ferverbrasil.com.br']
 
